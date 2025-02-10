@@ -25,8 +25,8 @@ except:
 
 setup(
     name='PyLink',
-    version='0.3.3',
-    url='https://github.com/SalemHarrache/PyLink',
+    version='0.3.4',
+    url='https://github.com/MarcoGos/PyLink',
     license='BSD',
     description='Universal communication interface using File-Like API',
     long_description=README + '\n\n' + CHANGES,

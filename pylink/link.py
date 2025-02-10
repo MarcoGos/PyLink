@@ -117,18 +117,18 @@ class TCPLink(Link):
             self.send_to_socket(data)
         self.log("Write", data)
 
-    def read(self, size=None, timeout=None):
+    def read(self, size=None, timeout=None, binary=False):
         '''Read data from socket. The maximum amount of data to be received at
         once is specified by `size`. If `is_byte` is True, the data will be
         convert to hexadecimal array.'''
         size = size or self.MAX_STRING_SIZE
         timeout = (timeout or 1) * (self.timeout or 1)
-        data = self.recv_timeout(size, timeout)
+        data = self.recv_timeout(size, timeout, binary)
         if len(data) != 0 :
             self.log("Read", data)
         return data
 
-    def recv_timeout(self, size, timeout):
+    def recv_timeout(self, size, timeout, binary=False):
         '''Uses a non-blocking sockets in order to continue trying to get data
         as long as the client manages to even send a single byte.
         This is useful for moving data which you know very little about
@@ -157,9 +157,12 @@ class TCPLink(Link):
             except:
                 pass
         # Try to convert into str
-        try:
-            return str(b"".join(total_data), encoding='utf8')
-        except:
+        if not binary:
+            try:
+                return str(b"".join(total_data), encoding='utf8')
+            except:
+                pass
+        else:
             return b"".join(total_data)
 
     def send_to_socket(self, data):
@@ -263,7 +266,7 @@ class SerialLink(Link):
         except:
             self.log("Write", data)
 
-    def read(self, size=None, timeout=None):
+    def read(self, size=None, timeout=None, binary=False):
         '''Read data from the serial connection. The maximum amount of data
         to be received at once is specified by `size`. If `is_byte` is True,
         the data will be convert to byte array.'''
@@ -271,10 +274,11 @@ class SerialLink(Link):
         timeout = (timeout or 1) * (self.timeout or 1)
         self.serial.timeout = timeout
         data = self.serial.read(size)
-        try:
-            data = str(data, encoding='utf8')
-        except:
-            pass
+        if not binary:
+            try:
+                data = str(data, encoding='utf8')
+            except:
+                pass
         if len(data) != 0 :
             self.log("Read", data)
         self.serial.timeout = self.timeout
