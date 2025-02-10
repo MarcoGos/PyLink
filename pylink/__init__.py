@@ -9,7 +9,7 @@
     :license: BSD, see LICENSE for details.
 
 '''
-VERSION = '0.3.5'
+VERSION = '0.3.6'
 __version__ = VERSION
 
 from .link import TCPLink, SerialLink, UDPLink, GSMLink

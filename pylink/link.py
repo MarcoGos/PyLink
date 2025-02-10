@@ -162,8 +162,7 @@ class TCPLink(Link):
                 return str(b"".join(total_data), encoding='utf8')
             except:
                 pass
-        else:
-            return b"".join(total_data)
+        return b"".join(total_data)
 
     def send_to_socket(self, data):
         '''Send data to TCP socket.'''
